@@ -1,5 +1,5 @@
 
-> Open this page at [https://mrrsquared.github.io/secondoscatattempt/](https://mrrsquared.github.io/secondoscatattempt/)
+> Open this page at [https://mrrsquared.github.io/secondOscatAttempt/](https://mrrsquared.github.io/secondOscatAttempt/)
 
 ## Use as Extension
 
