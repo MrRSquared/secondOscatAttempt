@@ -148,21 +148,9 @@ namespace Oscats {
     export function setMotor(myMotor:MyMotors, input:number){
         let convertedInput = Oscats.convertMotor(Math.abs(input),255);
         if (driverType == 0){
-            let motorChoice = motor.Motors.M1;
-            switch(myMotor){
-                case 0:
-                    motorChoice = motor.Motors.M1;
-                    break;
-                case 1:
-                    motorChoice = motor.Motors.M2;
-                    break;
-                case 2:
-                    motorChoice = motor.Motors.M3;
-                    break;
-                case 3:
-                    motorChoice = motor.Motors.M4;
-                    break;   
-            }
+
+            let motorChoice = Oscats.getMotor(myMotor);
+
             if (input > 0){
             motor.MotorRun(motorChoice, motor.Dir.CW, Math.abs(convertedInput))
             } else if (input < 0){
@@ -188,6 +176,26 @@ namespace Oscats {
             DFRobotMaqueenPlus.mototRun(motorChoice, Dir.CCW, 0)
         }
     }
+    //% block
+    //% group="Motors"
+    export function arcadeDrive(leftMotor:MyMotors,rightMotor:MyMotors, speed:number, turnRate:number){
+
+        let leftMotorChoice = Oscats.getMotor(leftMotor);
+        let rightMotorChoice = Oscats.getMotor(rightMotor);
+        let m_speed = speed;
+        let m_turn = turnRate;
+
+        
+        if (input > 0){
+            motor.MotorRun(motorChoice, motor.Dir.CW, Math.abs(convertedInput))
+            
+            motor.MotorRun(motorChoice, motor.Dir.CW, 0)
+  driv = left +right
+
+
+    }
+
+    
 
     //% block="drive Mode:$arg"
     //% weight=98
@@ -261,8 +269,38 @@ namespace Oscats {
 
     export function convertMotor(input:number, scale:number){
         let convertedNumber = 0
-        convertedNumber = (input/1)*scale;
+        convertedNumber = (input)*scale;
         return convertedNumber;
+    }
+    export function getMotor(myMotor:MyMotors){
+                let motorChoice = motor.Motors.M1;
+            switch(myMotor){
+                case 0:
+                    motorChoice = motor.Motors.M1;
+                    break;
+                case 1:
+                    motorChoice = motor.Motors.M2;
+                    break;
+                case 2:
+                    motorChoice = motor.Motors.M3;
+                    break;
+                case 3:
+                    motorChoice = motor.Motors.M4;
+                    break;
+                    return motorChoice
+            }
+    } 
+
+    export function getSign(input:number){
+        let direction = motor.Dir.CW;
+        switch(Sign(input)){
+            case 1:
+            motor.Dir.CW;
+            break;
+            case -1:
+            motor.Dir.CCW;
+            break;
+        }
     }
 
 
@@ -310,7 +348,7 @@ if (RobotPeriodic!=null){
 }
 
 input.onButtonPressed(Button.B, function () {//Trigger Auto
-    if (mode ==0){
+    if (mode == 0){
         mode = 2;
     } else {
         mode =0;
@@ -391,7 +429,8 @@ if ((init == true) && (RobotInit!=null)){
                 if (DisPeriodic!=null){
                     DisPeriodic(null) //Fire the code
                 } else{
-                    basic.showString("D");  
+                    basic.showString("D");
+                    motor.motorStopAll();  
                 } 
         }
         init = false;
