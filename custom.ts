@@ -186,12 +186,6 @@ namespace Oscats {
         let m_turn = turnRate;
 
         
-        if (input > 0){
-            motor.MotorRun(motorChoice, motor.Dir.CW, Math.abs(convertedInput))
-            
-            motor.MotorRun(motorChoice, motor.Dir.CW, 0)
-  driv = left +right
-
 
     }
 
@@ -293,7 +287,7 @@ namespace Oscats {
 
     export function getSign(input:number){
         let direction = motor.Dir.CW;
-        switch(Sign(input)){
+        switch(Math.sign(input)){
             case 1:
             motor.Dir.CW;
             break;
