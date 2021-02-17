@@ -3,8 +3,12 @@ Oscats.on(RobotControl.RobotInit, function () {
     Oscats.setDriverType(DriverType.DfDriver)
 })
 Oscats.driveMode(RobotMode.TelePeriodic, function () {
-    Oscats.setMotor(MyMotors.Motor1, Oscats.getAxis(Methods.X))
-    Oscats.setMotor(MyMotors.Motor2, Oscats.getAxis(Methods.Y))
+    Oscats.arcadeDrive(
+    MyMotors.Motor1,
+    MyMotors.Motor2,
+    Oscats.getAxis(Methods.X),
+    Oscats.getAxis(Methods.Y)
+    )
 })
 Oscats.driveMode(RobotMode.AutoPeriodic, function () {
     Oscats.setMotor(MyMotors.Motor1, 0)

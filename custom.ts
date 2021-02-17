@@ -182,10 +182,15 @@ namespace Oscats {
 
         let leftMotorChoice = Oscats.getMotor(leftMotor);
         let rightMotorChoice = Oscats.getMotor(rightMotor);
-        let m_speed = speed;
-        let m_turn = turnRate;
+        let leftRawSpeed = speed-turnRate;
+        let rightRawSpeed = speed+turnRate;
+        let leftConvertedSpeed = Oscats.convertMotor(Math.abs(leftRawSpeed), 255)
+        let rightConvertedSpeed = Oscats.convertMotor(Math.abs(rightRawSpeed), 255);
 
-        
+
+                
+        motor.MotorRun(leftMotorChoice, Oscats.getSign(leftRawSpeed), leftConvertedSpeed);
+        motor.MotorRun(rightMotorChoice, Oscats.getSign(rightRawSpeed), rightConvertedSpeed);
 
     }
 
@@ -289,12 +294,13 @@ namespace Oscats {
         let direction = motor.Dir.CW;
         switch(Math.sign(input)){
             case 1:
-            motor.Dir.CW;
+            direction = motor.Dir.CW;
             break;
             case -1:
-            motor.Dir.CCW;
+            direction = motor.Dir.CCW;
             break;
         }
+        return direction;
     }
 
 
