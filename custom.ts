@@ -23,6 +23,7 @@ let DisInit: (params: any) => void
 let DisPeriodic: (params: any) => void
 let RadioChannel = 1;
 let IntroString = "G'Day";
+let robotInit = true;
 let init = true;
 let xAxis = 0;
 let yAxis = 0;
@@ -149,7 +150,21 @@ namespace Oscats {
         let convertedInput = Oscats.convertMotor(Math.abs(input),255);
         if (driverType == 0){
 
-            let motorChoice = Oscats.getMotor(myMotor);
+            let motorChoice = motor.Motors.M1;
+            switch(myMotor){
+                case 0:
+                    motorChoice = motor.Motors.M1;
+                    break;
+                case 1:
+                    motorChoice = motor.Motors.M2;
+                    break;
+                case 2:
+                    motorChoice = motor.Motors.M3;
+                    break;
+                case 3:
+                    motorChoice = motor.Motors.M4;
+                    break;
+            }
 
             if (input > 0){
             motor.MotorRun(motorChoice, motor.Dir.CW, Math.abs(convertedInput))
@@ -180,10 +195,10 @@ namespace Oscats {
     //% group="Motors"
     export function arcadeDrive(leftMotor:MyMotors,rightMotor:MyMotors, speed:number, turnRate:number){
 
-        let leftMotorChoice = Oscats.getMotor(leftMotor);
-        let rightMotorChoice = Oscats.getMotor(rightMotor);
-        let leftRawSpeed = speed-turnRate;
-        let rightRawSpeed = speed+turnRate;
+        let leftMotorChoice = getMotor(leftMotor);
+        let rightMotorChoice = getMotor(rightMotor);
+        let leftRawSpeed = speed+turnRate;
+        let rightRawSpeed = speed-turnRate;
         let leftConvertedSpeed = Oscats.convertMotor(Math.abs(leftRawSpeed), 255)
         let rightConvertedSpeed = Oscats.convertMotor(Math.abs(rightRawSpeed), 255);
 
@@ -286,18 +301,19 @@ namespace Oscats {
                 case 3:
                     motorChoice = motor.Motors.M4;
                     break;
-                    return motorChoice
+                    
             }
+            return motorChoice
     } 
 
     export function getSign(input:number){
         let direction = motor.Dir.CW;
         switch(Math.sign(input)){
             case 1:
-            direction = motor.Dir.CW;
+            direction = motor.Dir.CCW;
             break;
             case -1:
-            direction = motor.Dir.CCW;
+            direction = motor.Dir.CW;
             break;
         }
         return direction;
@@ -372,13 +388,13 @@ radio.onReceivedValue(function (name, value: number) {
 
 basic.forever(function () { //Let's keep a forever loop running inside our custom namespace. You could probably at a basic.pause at the bottom of the loop to slow down how fast it runs.
 //if this is our first run, run init.
-if ((init == true) && (RobotInit!=null)){
+if ((robotInit == true) && (RobotInit!=null)){
     RobotInit(null) //Fire the code
 }
 
     //let nextEvent2Time = 0
     if (input.runningTime() > RobotTimer) {
-        if (mode!=previousMode){//Trigger Init Functions
+        if (init==true){//Trigger Init Functions
         switch(mode){
             case 1: //Tele
                 if (TeleInit!=null){
@@ -398,10 +414,12 @@ if ((init == true) && (RobotInit!=null)){
                 if (DisInit!=null){
                     DisInit(null) //Fire the code
                     motor.motorStopAll()
+                    basic.showString("D")
                 }
                 basic.showString("D");
                 motor.motorStopAll()
-        }   
+        } 
+        init = false;
         }
         //Run Robot Init...
  
@@ -412,14 +430,12 @@ if ((init == true) && (RobotInit!=null)){
             case 1: //Tele
                 if (TelePeriodic!=null){
                     TelePeriodic(null) //Fire the code
-                    basic.showString("T");
                 } else{
                     basic.showString("T");  
                 }
             break;
             case 2: //Auto
                 if (AutoPeriodic!=null){
-                    basic.showString("A");
                     AutoPeriodic(null) //Fire the code
                 } else{
                     basic.showString("A");  
@@ -433,7 +449,10 @@ if ((init == true) && (RobotInit!=null)){
                     motor.motorStopAll();  
                 } 
         }
-        init = false;
+        robotInit = false;
+        if (previousMode!=mode){
+            init = true;
+        } 
         previousMode = mode;
         RobotTimer = input.runningTime() + RobotTimer_PERIOD //Set the next timer event
     }
