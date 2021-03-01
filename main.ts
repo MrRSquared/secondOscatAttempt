@@ -10,6 +10,3 @@ Oscats.driveMode(RobotMode.TelePeriodic, function () {
     Oscats.getAxis(Methods.X)
     )
 })
-Oscats.driveMode(RobotMode.AutoInit, function () {
-    Oscats.setMotor(MyMotors.Motor1, 0.2)
-})

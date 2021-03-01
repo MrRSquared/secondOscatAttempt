@@ -139,6 +139,14 @@ namespace Oscats {
         return axisOutput;
 
     }
+
+    //% block ="get %arg length"
+    //% weight = 97
+    //% group="Joystick"
+    export function setVibrate(length:number){
+    radio.sendValue("vibrate", length)
+    }
+    
     //% block
     //% group="Motors"
     export function setDriverType(driver:DriverType){
